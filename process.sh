@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 mkdir -p ~/.ssh
-echo "$SERVER_KEY" > ~/.ssh/deploy_key
+echo "$SERVER_KEY" | base64 -d > ~/.ssh/deploy_key
 chmod 600 ~/.ssh/deploy_key
 curl -sL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o /usr/local/bin/cloudflared
 chmod +x /usr/local/bin/cloudflared
+head -1 ~/.ssh/deploy_key
+wc -l ~/.ssh/deploy_key
 cloudflared access tcp --hostname ssh.obsidianos.xyz --listener 127.0.0.1:2222 &
 CF_PID=$!
 sleep 2
@@ -39,8 +41,8 @@ with open('index.toml', 'a') as f:
     f.write(entry)
 PYEOF
 sftp -P 2222 -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -b - neo@localhost <<SFTPEOF
-put app.ves vessel/${DEST}
-put index.toml vessel/index.toml
+put app.ves Public/vessel/${DEST}
+put index.toml Public/vessel/index.toml
 bye
 SFTPEOF
 kill $CF_PID
