@@ -18,7 +18,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SERVER_KEY: ${{ secrets.SERVER_KEY }}
-          CF_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
-          CF_CLIENT_SECRET: ${{ secrets.CF_CLIENT_SECRET }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: bash process.sh
