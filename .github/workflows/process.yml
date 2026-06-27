@@ -4,6 +4,8 @@ on:
 
 jobs:
   process:
+    permissions:
+      pull-requests: write
     if: ${{ github.event.review.state == 'approved' }}
     runs-on: ubuntu-latest
     steps:
